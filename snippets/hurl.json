@@ -1,0 +1,177 @@
+{
+  "Http Status Code Assert": {
+    "prefix": "status",
+    "body": [
+      "HTTP ${1:200}"
+    ],
+    "description": "Simple request with HTTP status code assertion"
+  },
+  "Basic Request With Asserts": {
+    "prefix": "hurl-get",
+    "body": [
+      "# ${1:Description}",
+      "GET ${2:https://example.org/api/resource}",
+      "",
+      "HTTP ${3:200}",
+      "[Asserts]",
+      "header \"Content-Type\" contains \"${4:application/json}\"",
+      "jsonpath \"$.${5:id}\" exists",
+      "$0"
+    ],
+    "description": "Simple request with response assertions"
+  },
+  "POST JSON": {
+    "prefix": "hurl-post-json",
+    "body": [
+      "# ${1:Create resource}",
+      "POST ${2:https://example.org/api/resources}",
+      "Content-Type: application/json",
+      "{",
+      "  \"name\": \"${3:test}\"",
+      "}",
+      "",
+      "HTTP ${4:201}",
+      "[Captures]",
+      "resource_id: jsonpath \"$.id\""
+    ],
+    "description": "POST request with JSON body and capture"
+  },
+  "POST Form": {
+    "prefix": "hurl-post-form",
+    "body": [
+      "# ${1:Submit form}",
+      "POST ${2:https://example.org/login}",
+      "[Form]",
+      "username: ${3:john}",
+      "password: ${4:secret}",
+      "",
+      "HTTP ${5:302}",
+      "[Asserts]",
+      "header \"Location\" exists"
+    ],
+    "description": "POST with [Form] section"
+  },
+  "Request With Scoped Variables": {
+    "prefix": "hurl-vars",
+    "body": [
+      "# Variables in [Options] are available to subsequent entries",
+      "GET https://{{host}}/${1:health}",
+      "[Options]",
+      "variable: host=${2:example.org}",
+      "variable: token=${3:demo-token}",
+      "HTTP 200",
+      "",
+      "GET https://{{host}}/${4:api/resource}",
+      "Authorization: Bearer {{token}}",
+      "HTTP ${5:200}"
+    ],
+    "description": "Use [Options] variable: to set shared variables"
+  },
+  "Capture And Reuse": {
+    "prefix": "hurl-capture",
+    "body": [
+      "# Capture a value from one response",
+      "GET ${1:https://example.org/api/items/1}",
+      "HTTP 200",
+      "[Captures]",
+      "item_id: jsonpath \"$.id\"",
+      "",
+      "# Reuse captured value in next request",
+      "GET ${2:https://example.org/api/items}/{{item_id}}",
+      "HTTP 200",
+      "[Asserts]",
+      "jsonpath \"$.id\" == {{item_id}}"
+    ],
+    "description": "Capture a variable and reuse it in chained requests"
+  },
+  "Redirect Flow": {
+    "prefix": "hurl-redirect",
+    "body": [
+      "GET ${1:https://example.org/redirecting}",
+      "[Options]",
+      "location: true",
+      "HTTP 200",
+      "[Asserts]",
+      "redirects count == ${2:1}",
+      "url == \"${3:https://example.org/redirected}\""
+    ],
+    "description": "Follow redirects and assert final URL"
+  },
+  "Multipart Upload": {
+    "prefix": "hurl-upload",
+    "body": [
+      "POST ${1:https://example.org/upload}",
+      "[Multipart]",
+      "description: ${2:File upload}",
+      "file: file,${3:path/to/file.png}; ${4:image/png}",
+      "",
+      "HTTP ${5:200}",
+      "[Asserts]",
+      "status == 200"
+    ],
+    "description": "Multipart upload with [Multipart] alias"
+  },
+  "GraphQL Request": {
+    "prefix": "hurl-graphql",
+    "body": [
+      "POST ${1:https://example.org/graphql}",
+      "```graphql",
+      "query Hero($episode: Episode) {",
+      "  hero(episode: $episode) {",
+      "    name",
+      "  }",
+      "}",
+      "",
+      "variables {",
+      "  \"episode\": \"${2:JEDI}\"",
+      "}",
+      "```",
+      "",
+      "HTTP 200",
+      "[Asserts]",
+      "jsonpath \"$.data.hero.name\" exists"
+    ],
+    "description": "GraphQL request body with assertions"
+  },
+  "Performance Assert": {
+    "prefix": "hurl-duration",
+    "body": [
+      "GET ${1:https://example.org/health}",
+      "HTTP 200",
+      "[Asserts]",
+      "duration < ${2:1000}",
+      "rawbytes count > ${3:0}"
+    ],
+    "description": "Asserts on duration and raw response bytes"
+  },
+  "Full CRUD Flow": {
+    "prefix": "hurl-full",
+    "body": [
+      "# ${1:API Test Suite}",
+      "GET {{base_url}}/health",
+      "HTTP 200",
+      "",
+      "POST {{base_url}}/${2:resources}",
+      "Authorization: Bearer {{token}}",
+      "Content-Type: application/json",
+      "{",
+      "  \"name\": \"${3:test-item}\"",
+      "}",
+      "HTTP 201",
+      "[Captures]",
+      "resource_id: jsonpath \"$.id\"",
+      "",
+      "GET {{base_url}}/${2:resources}/{{resource_id}}",
+      "Authorization: Bearer {{token}}",
+      "HTTP 200",
+      "[Asserts]",
+      "jsonpath \"$.name\" == \"${3:test-item}\"",
+      "jsonpath \"$.id\" == {{resource_id}}",
+      "",
+      "DELETE {{base_url}}/${2:resources}/{{resource_id}}",
+      "Authorization: Bearer {{token}}",
+      "HTTP 204"
+    ],
+    "description": "Full create/read/delete flow with capture reuse"
+  }
+}

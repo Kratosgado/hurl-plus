@@ -1,0 +1,249 @@
+{
+  "name": "hurl-plus",
+  "displayName": "Hurl Toolkit",
+  "description": "Complete Hurl HTTP testing toolkit: syntax highlighting, run requests, response viewer, and IntelliSense for .hurl files",
+  "version": "0.0.1",
+  "publisher": "kratosgado",
+  "license": "MIT",
+  "icon": "assets/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kratosgado/hurl-plus"
+  },
+  "bugs": {
+    "url": "https://github.com/kratosgado/hurl-plus/issues"
+  },
+  "homepage": "https://github.com/kratosgado/hurl-plus#readme",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Testing",
+    "Snippets"
+  ],
+  "keywords": [
+    "hurl",
+    "http",
+    "api",
+    "testing",
+    "rest",
+    "request"
+  ],
+  "activationEvents": [
+    "onNotebook:hurl-notebook",
+    "onCommand:hurl-plus.selectEnvironment",
+    "onCommand:hurl-plus.clearEnvironment",
+    "onCommand:hurl-plus.openAsNotebook"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "hurl",
+        "aliases": [
+          "Hurl",
+          "hurl"
+        ],
+        "extensions": [
+          ".hurl"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./assets/hurl-icon.svg",
+          "dark": "./assets/hurl-icon.svg"
+        }
+      }
+    ],
+    "notebooks": [
+      {
+        "type": "hurl-notebook",
+        "displayName": "Hurl Notebook",
+        "selector": [
+          {
+            "filenamePattern": "*.hurl"
+          }
+        ]
+      }
+    ],
+    "grammars": [
+      {
+        "language": "hurl",
+        "scopeName": "source.hurl",
+        "path": "./syntaxes/hurl.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.block.json": "json",
+          "meta.embedded.block.xml": "xml",
+          "meta.embedded.block.graphql": "graphql"
+        }
+      }
+    ],
+    "snippets": [
+      {
+        "language": "hurl",
+        "path": "./snippets/hurl.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "hurl-plus.runEntry",
+        "title": "Hurl: Run Request Entry"
+      },
+      {
+        "command": "hurl-plus.runFile",
+        "title": "Hurl: Run Entire File"
+      },
+      {
+        "command": "hurl-plus.selectEnvironment",
+        "title": "Hurl: Select Environment"
+      },
+      {
+        "command": "hurl-plus.clearEnvironment",
+        "title": "Hurl: Clear Environment"
+      },
+      {
+        "command": "hurl-plus.fetchGraphQLSchema",
+        "title": "Hurl: Fetch GraphQL Schema"
+      },
+      {
+        "command": "hurl-plus.addAuthToken",
+        "title": "Hurl: Add Auth Token"
+      },
+      {
+        "command": "hurl-plus.manageVariables",
+        "title": "Hurl: Manage Variables"
+      },
+      {
+        "command": "hurl-plus.openAsNotebook",
+        "title": "Hurl: Open as Notebook",
+        "icon": "$(notebook)"
+      },
+      {
+        "command": "hurl-plus.openSettings",
+        "title": "Hurl: Open Extension Settings"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "hurl-plus.openAsNotebook",
+          "when": "resourceExtname == .hurl",
+          "group": "navigation"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "hurl-plus.openAsNotebook",
+          "when": "resourceExtname == .hurl && activeEditorIsNotPreview",
+          "group": "navigation"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "hurl-plus.runEntryFocused",
+        "key": "ctrl+enter",
+        "when": "editorTextFocus && editorLangId == hurl && !notebookCellEditorFocus"
+      },
+      {
+        "command": "hurl-plus.runFileFocused",
+        "key": "ctrl+shift+enter",
+        "when": "editorTextFocus && editorLangId == hurl && !notebookCellEditorFocus"
+      },
+      {
+        "command": "notebook.cell.execute",
+        "key": "ctrl+enter",
+        "when": "notebookCellEditorFocus && notebookType == 'hurl-notebook'"
+      }
+    ],
+    "configuration": {
+      "title": "Hurl Toolkit",
+      "properties": {
+        "hurl-plus.hurlPath": {
+          "type": "string",
+          "default": "hurl",
+          "description": "Path to the hurl executable"
+        },
+        "hurl-plus.showResponseInWebview": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show response in a webview panel instead of the output channel"
+        },
+        "hurl-plus.additionalArguments": {
+          "type": "string",
+          "default": "",
+          "description": "Additional arguments to pass to hurl when running requests"
+        },
+        "hurl-plus.variablesFile": {
+          "type": "string",
+          "default": "",
+          "description": "Path to a variables file to use with --variables-file"
+        },
+        "hurl-plus.activeEnvironmentProfile": {
+          "type": "string",
+          "default": "",
+          "description": "Default named environment profile to use for Hurl runs"
+        },
+        "hurl-plus.environmentProfiles": {
+          "type": "object",
+          "default": {},
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "hurlPath": {
+                "type": "string",
+                "default": ""
+              },
+              "variablesFile": {
+                "type": "string",
+                "default": ""
+              },
+              "additionalArguments": {
+                "type": "string",
+                "default": ""
+              },
+              "variables": {
+                "type": "object",
+                "default": {},
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "environmentVariables": {
+                "type": "object",
+                "default": {},
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "description": "Named environment profiles that can override Hurl paths, variables, and process environment"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "lint": "tsc --noEmit",
+    "package": "vsce package",
+    "test:e2e": "tsc -p ./tsconfig.test.json && node ./dist/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^20.19.41",
+    "@types/vscode": "^1.85.0",
+    "@vscode/test-electron": "^2.5.2",
+    "esbuild": "^0.19.11",
+    "glob": "^13.0.6",
+    "mocha": "^11.7.5",
+    "puppeteer": "^24.40.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@vscode/vsce": "^3.9.1",
+    "global": "^4.4.0"
+  }
+}
