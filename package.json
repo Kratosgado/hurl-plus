@@ -245,5 +245,6 @@
   "dependencies": {
     "@vscode/vsce": "^3.9.1",
     "global": "^4.4.0"
-  }
+  },
+  "packageManager": "pnpm@10.20.3"
 }
