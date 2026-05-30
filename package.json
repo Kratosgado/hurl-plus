@@ -1,6 +1,6 @@
 {
   "name": "hurl-plus",
-  "displayName": "Hurl Toolkit",
+  "displayName": "Hurl Plus",
   "description": "Complete Hurl HTTP testing toolkit: syntax highlighting, run requests, response viewer, and IntelliSense for .hurl files",
   "version": "0.0.1",
   "publisher": "kratosgado",
