@@ -2,7 +2,7 @@
   "name": "hurl-plus",
   "displayName": "Hurl Plus",
   "description": "Complete Hurl HTTP testing toolkit: syntax highlighting, run requests, response viewer, and IntelliSense for .hurl files",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "kratosgado",
   "license": "MIT",
   "icon": "assets/hurl-icon.png",

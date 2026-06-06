@@ -13,10 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Get version from package.json
-        id: tag
-        run: echo "version=v$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/setup-node@v4
         with:
@@ -25,6 +23,19 @@ jobs:
       - uses: pnpm/action-setup@v4
 
       - run: pnpm install --frozen-lockfile
+
+      - name: Bump patch version
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          npm version patch --no-git-tag-version
+          git add package.json
+          git commit -m "chore: bump version to $(node -p "require('./package.json').version") [skip ci]"
+          git push
+
+      - name: Get version from package.json
+        id: tag
+        run: echo "version=v$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
 
       - run: pnpm run build
 
@@ -35,7 +46,7 @@ jobs:
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
 
-      - name: Upload VSIX to GitHub Release
-        run: gh release upload "${{ steps.tag.outputs.version }}" *.vsix
+      - name: Create GitHub Release and upload VSIX
+        run: gh release create "${{ steps.tag.outputs.version }}" *.vsix --title "${{ steps.tag.outputs.version }}" --generate-notes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
