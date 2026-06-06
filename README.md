@@ -9,9 +9,19 @@
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-22c55e.svg" alt="License: MIT"></a>
   <a href="https://hurl.dev"><img src="https://img.shields.io/badge/Hurl-hurl.dev-22c55e" alt="Hurl"></a>
 </p>
+<em>
+<p align="center">
+  <b> Honourable mentions </b>
+ <ul>
+  <li> <a href="https://github.com/atoolz/hurl-vscode-toolkit">Hurl Toolkit</a>: Atoolz for getting the extension started. <a href="https://marketplace.visualstudio.com/items?itemName=atoolz.hurl-vscode-toolkit">Vscode Link</a> </li>
+  <li> Notebook feature is inspired by <a href="https://marketplace.visualstudio.com/items?itemName=WSO2.hurl-client"> WSO2 Hurl Client </a> 
+</li>
+ </ul>
+</p>
+</em>
 
 <p align="center">
-  Complete <a href="https://hurl.dev">Hurl</a> HTTP testing toolkit for VS Code. Syntax highlighting, run requests, response viewer, and IntelliSense for <code>.hurl</code> files.
+  Complete <a href="https://hurl.dev">Hurl</a> HTTP testing toolkit for VS Code. Syntax highlighting, run requests,notebook support response viewer, and IntelliSense for <code>.hurl</code> files.
 </p>
 
 ## Features
