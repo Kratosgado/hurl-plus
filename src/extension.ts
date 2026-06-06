@@ -210,22 +210,22 @@ export function activate( context: vscode.ExtensionContext ): void {
     vscode.commands.registerCommand(
       "hurl-plus.addAuthToken",
       async () => {
-        const AUTH_TYPES = [
+        const VARIABLE_TYPES = [
           { label: "Bearer Token", detail: "Authorization: Bearer {{variable_name}}", suggestedName: "bearer_token", prefix: "Bearer " },
           { label: "Basic Auth", detail: "Authorization: Basic {{variable_name}}", suggestedName: "basic_credentials", prefix: "Basic " },
           { label: "API Key", detail: "Used as {{variable_name}} in headers or query params", suggestedName: "api_key", prefix: "" },
-          { label: "Custom Token", detail: "Choose your own variable name", suggestedName: "token", prefix: "" },
+          { label: "Custom Var", detail: "Choose your own variable name", suggestedName: "token", prefix: "" },
         ];
 
-        const authType = await vscode.window.showQuickPick( AUTH_TYPES, {
-          title: "Add Auth Token (1/3) — Type",
+        const authType = await vscode.window.showQuickPick( VARIABLE_TYPES, {
+          title: "Add Env Var (1/3) — Type",
           placeHolder: "Select the authentication scheme",
           matchOnDetail: true,
         } );
         if ( !authType ) return;
 
         const variableName = await vscode.window.showInputBox( {
-          title: "Add Auth Token (2/3) — Variable Name",
+          title: "Add Env Var (2/3) — Variable Name",
           prompt: "Name for this variable (referenced as {{name}} in .hurl files)",
           value: authType.suggestedName,
           validateInput: ( v ) => {
@@ -238,7 +238,7 @@ export function activate( context: vscode.ExtensionContext ): void {
         if ( !variableName ) return;
 
         const tokenValue = await vscode.window.showInputBox( {
-          title: "Add Auth Token (3/3) — Value",
+          title: "Add Env Var (3/3) — Value",
           prompt: `Token value for ${authType.label}`,
           password: true,
           placeHolder: authType.label === "Bearer Token" ? "eyJhbGciOiJIUzI1NiJ9..." : "your-token-value",
@@ -289,7 +289,7 @@ export function activate( context: vscode.ExtensionContext ): void {
         if ( profileNames.length === 0 ) {
           const add = await vscode.window.showInformationMessage(
             "No environment profiles found. Would you like to add an auth token?",
-            "Add Auth Token"
+            "Add Env Var"
           );
           if ( add ) await vscode.commands.executeCommand( "hurl-plus.addAuthToken" );
           return;
@@ -320,7 +320,7 @@ export function activate( context: vscode.ExtensionContext ): void {
         if ( varNames.length === 0 ) {
           const add = await vscode.window.showInformationMessage(
             `Profile "${selectedProfile}" has no variables. Add an auth token?`,
-            "Add Auth Token"
+            "Add Env Var"
           );
           if ( add ) await vscode.commands.executeCommand( "hurl-plus.addAuthToken" );
           return;

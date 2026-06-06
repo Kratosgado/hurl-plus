@@ -5,7 +5,7 @@
   "version": "0.0.1",
   "publisher": "kratosgado",
   "license": "MIT",
-  "icon": "assets/icon.png",
+  "icon": "assets/hurl-icon.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/kratosgado/hurl-plus"
@@ -107,7 +107,7 @@
       },
       {
         "command": "hurl-plus.addAuthToken",
-        "title": "Hurl: Add Auth Token"
+        "title": "Hurl: Add Env Var"
       },
       {
         "command": "hurl-plus.manageVariables",
@@ -246,5 +246,5 @@
     "@vscode/vsce": "^3.9.1",
     "global": "^4.4.0"
   },
-  "packageManager": "pnpm@10.20.3"
+  "packageManager": "pnpm@10.30.3"
 }

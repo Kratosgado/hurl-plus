@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
-import * as fs from "fs/promises";
-import * as os from "os";
-import * as path from "path";
+import * as fs from "node:fs/promises";
+import * as os from "node:os";
+import * as path from "node:path";
 import { HurlEnvironmentManager } from "../utils/environmentManager";
 
 export const HURL_NOTEBOOK_TYPE = "hurl-notebook";
@@ -156,23 +156,21 @@ function buildMarkdownOutput(
     }
   }
 
-  lines.push( `${icon} **${success ? "Success" : "Failed"}** — *${envLabel}*` );
-  lines.push( "" );
+  lines.push( `${icon} **${success ? "Success" : "Failed"}** — *${envLabel}*`, "" );
 
   if ( statusLine ) {
-    lines.push( `**Status:** \`${statusLine}\`` );
-    lines.push( "" );
+    lines.push( `**Status:** \`${statusLine}\``, "" );
+  }
+
+  if ( !success ) {
+    const errorSnippet = extractErrorSnippet( stderrLines );
+    if ( errorSnippet ) {
+      lines.push( "**Error:**", "```", errorSnippet, "```" );
+    }
   }
 
   if ( responseHeaders.length > 0 ) {
-    lines.push( "<details><summary>Response Headers</summary>" );
-    lines.push( "" );
-    lines.push( "```" );
-    lines.push( responseHeaders.join( "\n" ) );
-    lines.push( "```" );
-    lines.push( "" );
-    lines.push( "</details>" );
-    lines.push( "" );
+    lines.push( "<details><summary>Response Headers</summary>", "", "```", responseHeaders.join( "\n" ), "```", "", "</details>", "" );
   }
 
   // Show response body — fall back to extracting from verbose stderr output when
@@ -180,20 +178,7 @@ function buildMarkdownOutput(
   const body = stdout.trim() || extractBodyFromVerboseStderr( stderrLines );
   if ( body ) {
     const formatted = tryFormatJson( body );
-    lines.push( "```" + ( formatted ? "json" : "" ) );
-    lines.push( formatted ?? body );
-    lines.push( "```" );
-    lines.push( "" );
-  }
-
-  if ( !success ) {
-    const errorSnippet = extractErrorSnippet( stderrLines );
-    if ( errorSnippet ) {
-      lines.push( "**Error:**" );
-      lines.push( "```" );
-      lines.push( errorSnippet );
-      lines.push( "```" );
-    }
+    lines.push( "```" + ( formatted ? "json" : "" ), formatted ?? body, "```", "" );
   }
 
   return lines.join( "\n" );
