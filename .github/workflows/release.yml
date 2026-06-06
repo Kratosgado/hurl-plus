@@ -26,6 +26,8 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      - run: pnpm run build
+
       - run: npx @vscode/vsce package --no-dependencies
 
       - name: Publish to VS Code Marketplace
