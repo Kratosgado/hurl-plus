@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/banner.png" alt="Hurl Toolkit Banner" width="1200">
+  <img src="assets/hurl_completion.png" alt="Hurl Toolkit Banner" width="1200">
 </p>
 
 <p align="center">
@@ -66,7 +66,7 @@ The active environment profile is respected, so all variables, CLI arguments, an
 Hover over any keyword to see documentation. Methods, status codes, sections, options, assert predicates, filter functions, and headers all provide contextual information.
 
 <p align="center">
-  <img src="assets/demo-hover.png" alt="Hover Documentation" width="800">
+  <img src="assets/hurl_docs.png" alt="Hover Documentation" width="800">
 </p>
 
 ### Diagnostics
