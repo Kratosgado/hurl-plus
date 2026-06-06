@@ -28,10 +28,14 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - run: npx @vscode/vsce package
+      - name: Install @vscode/vsce globally
+        run: pnpm add -g @vscode/vsce
+
+      - name: Package Extension
+        run: vsce package
 
       - name: Publish to VS Code Marketplace
-        run: npx @vscode/vsce publish --pat "$VSCE_PAT"
+        run: vsce publish --pat "$VSCE_PAT"
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
 
