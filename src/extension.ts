@@ -10,6 +10,8 @@ import {
 } from "./providers/codeLensProvider";
 import { HurlEnvironmentManager } from "./utils/environmentManager";
 import { activateHurlNotebook, HURL_NOTEBOOK_TYPE } from "./notebook/index";
+import { VARIABLE_DETAILS } from "./utils/types";
+import { VARIABLE_TYPES } from "./utils/data";
 
 type PickItem = vscode.QuickPickItem & { value: string };
 
@@ -210,12 +212,6 @@ export function activate( context: vscode.ExtensionContext ): void {
     vscode.commands.registerCommand(
       "hurl-plus.addAuthToken",
       async () => {
-        const VARIABLE_TYPES = [
-          { label: "Bearer Token", detail: "Authorization: Bearer {{variable_name}}", suggestedName: "bearer_token", prefix: "Bearer " },
-          { label: "Basic Auth", detail: "Authorization: Basic {{variable_name}}", suggestedName: "basic_credentials", prefix: "Basic " },
-          { label: "API Key", detail: "Used as {{variable_name}} in headers or query params", suggestedName: "api_key", prefix: "" },
-          { label: "Custom Var", detail: "Choose your own variable name", suggestedName: "token", prefix: "" },
-        ];
 
         const authType = await vscode.window.showQuickPick( VARIABLE_TYPES, {
           title: "Add Env Var (1/3) — Type",
@@ -239,9 +235,9 @@ export function activate( context: vscode.ExtensionContext ): void {
 
         const tokenValue = await vscode.window.showInputBox( {
           title: "Add Env Var (3/3) — Value",
-          prompt: `Token value for ${authType.label}`,
-          password: true,
-          placeHolder: authType.label === "Bearer Token" ? "eyJhbGciOiJIUzI1NiJ9..." : "your-token-value",
+          prompt: `Env value for ${authType.label}`,
+          password: authType.label !== 'Custom Var',
+          placeHolder: authType.label === "Bearer Token" ? "eyJhbGciOiJIUzI1NiJ9..." : "your-env-value",
           validateInput: ( v ) => v.trim() ? null : "Token value is required",
         } );
         if ( !tokenValue?.trim() ) return;
